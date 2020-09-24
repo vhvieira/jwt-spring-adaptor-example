@@ -1,0 +1,47 @@
+dn: dc=devglan,dc=com
+objectclass: top
+objectclass: domain
+objectclass: extensibleObject
+dc: devglan
+
+dn: ou=groups,dc=devglan,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: groups
+
+dn: ou=people,dc=devglan,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: people
+
+dn: uid=john,ou=people,dc=devglan,dc=com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: John
+sn: Doe
+uid: john
+userPassword: $2a$10$0DOsa/NQfA7chUpGVLMRfeplRe5ILxX.RSh5jAl73mZBRGt3HjcD6
+
+dn: uid=mike,ou=people,dc=devglan,dc=com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Mike
+sn: Hus
+uid: mike
+userPassword: $2a$10$bj6RAtCt89Y7Y87awGAvPuThR6AaDEz/szGlsIp9zvhGLrAp443Ny
+
+dn: cn=admin,ou=groups,dc=devglan,dc=com
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: admin
+uniqueMember: uid=john,ou=people,dc=devglan,dc=com
+
+dn: cn=user,ou=groups,dc=devglan,dc=com
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: user
+uniqueMember: uid=mike,ou=people,dc=devglan,dc=com
