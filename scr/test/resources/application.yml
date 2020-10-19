@@ -1,0 +1,27 @@
+server:
+  port: 8080
+  servlet:
+    contextPath: /security-poc
+#NO HTTPS FOR TESTING
+#  ssl:
+#    key-store: classpath:test-cert.p12
+#    key-store-password: password
+#    key-store-type: pkcs12
+#    key-alias: test-cert
+#    key-password: password
+#    trust-store: classpath:serverkeystore.jks
+#    trust-store-password: Avaya123
+logging:
+  level:
+    .: DEBUG
+    org.springframework: DEBUG
+    com.avaya.spring.securitypoc: DEBUG
+    com.avaya.ept.security: DEBUG
+#spring LDAP configuration using UnboundID LDAP SDK
+#File my-server.ldif was add to classpath with two users: john/john and mike/mike.
+spring:
+    ldap:
+         embedded:
+              ldif: 'classpath:my-server.ldif'
+              base-dn: dc=devglan,dc=com
+              port: 8389

@@ -83,6 +83,7 @@ public class MultipleAuthProviderSecurityConfigiration02Tests extends BaseSecuri
         ResponseEntity<String> result = makeRestCallWithUser(BASIC_AUTH_ENDPOINT, VALID_USER, VALID_PASSWORD);
 
         assertThat(result.getStatusCodeValue()).isEqualTo(200);
+        assertThat(result.getBody()).isEqualTo("OK");
     }
     
     @Test
@@ -90,6 +91,7 @@ public class MultipleAuthProviderSecurityConfigiration02Tests extends BaseSecuri
         ResponseEntity<String> result = makeRestCallWithUser(BASIC_AUTH_ENDPOINT, VALID_LDAP_USER, VALID_LDAP_PASSWORD);
 
         assertThat(result.getStatusCodeValue()).isEqualTo(200);
+        assertThat(result.getBody()).isEqualTo("OK");
     }
     
     @Test
@@ -104,25 +106,25 @@ public class MultipleAuthProviderSecurityConfigiration02Tests extends BaseSecuri
      */
 
     @Test
-    public void testJWTUsingNoCredentials_then401() {
+    public void testJWTUsingNoCredentials_then403() {
         ResponseEntity<String> result = makeRestCall(INTERNAL_JWT_ENDPOINT);
-        assertEquals(401, result.getStatusCodeValue());
+        assertEquals(403, result.getStatusCodeValue());
     }
 
     @Test
-    public void testJWTUsingOnlyBasicValidUserAndPass_then401() {
+    public void testJWTUsingOnlyBasicValidUserAndPass_then403() {
         ResponseEntity<String> result = makeRestCallWithUser(INTERNAL_JWT_ENDPOINT, VALID_USER, VALID_PASSWORD);
-        assertEquals(401, result.getStatusCodeValue());
+        assertEquals(403, result.getStatusCodeValue());
     }
 
     @Test
-    public void testJWTUsingInvalidBasicValidUserAndInvalidPass_then401() {
+    public void testJWTUsingInvalidBasicValidUserAndInvalidPass_then400() {
         ResponseEntity<String> result = makeRestCallWithUser(LOGIN_JWT_ENDPOINT, VALID_USER, INVALID_PASSWORD);
         assertEquals(401, result.getStatusCodeValue());
         HttpHeaders headers = result.getHeaders();
 
         ResponseEntity<String> resultPing = makeRestCallWithHeaders(INTERNAL_JWT_ENDPOINT, headers);
-        assertThat(resultPing.getStatusCodeValue()).isEqualTo(401);
+        assertThat(resultPing.getStatusCodeValue()).isEqualTo(403);
     }
 
     @Test
@@ -133,6 +135,7 @@ public class MultipleAuthProviderSecurityConfigiration02Tests extends BaseSecuri
 
         ResponseEntity<String> resultPing = makeRestCallWithHeaders(INTERNAL_JWT_ENDPOINT, headers);
         assertThat(resultPing.getStatusCodeValue()).isEqualTo(200);
+        assertThat(result.getBody()).isEqualTo("OK");
     }
     
     @Test
@@ -143,6 +146,7 @@ public class MultipleAuthProviderSecurityConfigiration02Tests extends BaseSecuri
 
         ResponseEntity<String> resultPing = makeRestCallWithHeaders(INTERNAL_JWT_ENDPOINT, headers);
         assertThat(resultPing.getStatusCodeValue()).isEqualTo(200);
+        assertThat(result.getBody()).isEqualTo("OK");
     }
 
     @Test
@@ -150,20 +154,21 @@ public class MultipleAuthProviderSecurityConfigiration02Tests extends BaseSecuri
         HttpHeaders headers = super.getHeaderWithValidJWTInternalToken(VALID_USER);
         ResponseEntity<String> resultPing = makeRestCallWithHeaders(INTERNAL_JWT_ENDPOINT, headers);
         assertThat(resultPing.getStatusCodeValue()).isEqualTo(200);
+        assertThat(resultPing.getBody()).isEqualTo("OK");
     }
 
     @Test
-    public void testInternalJWTUsingJWTWrongKeyToken_then401() throws ReflectiveOperationException {
+    public void testInternalJWTUsingJWTWrongKeyToken_then403() throws ReflectiveOperationException {
         HttpHeaders headers = super.getHeaderWithWrongKeyJWTInternalToken(VALID_USER);
         ResponseEntity<String> resultPing = makeRestCallWithHeaders(INTERNAL_JWT_ENDPOINT, headers);
-        assertThat(resultPing.getStatusCodeValue()).isEqualTo(401);
+        assertThat(resultPing.getStatusCodeValue()).isEqualTo(403);
     }
 
     @Test
-    public void testInternalJWTUsingJWTExpiredToken_then401() {
+    public void testInternalJWTUsingJWTExpiredToken_then403() {
         HttpHeaders headers = super.getHeaderWithExpiredJWTInternalToken(VALID_USER);
         ResponseEntity<String> resultPing = makeRestCallWithHeaders(INTERNAL_JWT_ENDPOINT, headers);
-        assertThat(resultPing.getStatusCodeValue()).isEqualTo(401);
+        assertThat(resultPing.getStatusCodeValue()).isEqualTo(403);
     }
 
     /*
@@ -171,34 +176,34 @@ public class MultipleAuthProviderSecurityConfigiration02Tests extends BaseSecuri
      */
 
     @Test
-    public void testExternalJWTUsingNoCredentials_then401() {
+    public void testExternalJWTUsingNoCredentials_then403() {
         if (wasExternalTokenRead) {
             ResponseEntity<String> result = makeRestCall(EXTERNAL_JWT_ENDPOINT);
-            assertEquals(401, result.getStatusCodeValue());
+            assertEquals(403, result.getStatusCodeValue());
         } else {
             log.warn("External valid token testing scenario skkiped");
         }
     }
 
     @Test
-    public void testExternalJWTUsingOnlyBasicValidUserAndPass_then401() {
+    public void testExternalJWTUsingOnlyBasicValidUserAndPass_then403() {
         if (wasExternalTokenRead) {
             ResponseEntity<String> result = makeRestCallWithUser(EXTERNAL_JWT_ENDPOINT, VALID_USER, VALID_PASSWORD);
-            assertEquals(401, result.getStatusCodeValue());
+            assertEquals(403, result.getStatusCodeValue());
         } else {
             log.warn("External valid token testing scenario skkiped");
         }
     }
 
     @Test
-    public void testExternalJWTUsingInvalidBasicValidUserAndInvalidPass_then401() {
+    public void testExternalJWTUsingInvalidBasicValidUserAndInvalidPass_then403() {
         if (wasExternalTokenRead) {
             ResponseEntity<String> result = makeRestCallWithUser(EXTERNAL_JWT_ENDPOINT, VALID_USER, INVALID_PASSWORD);
-            assertEquals(401, result.getStatusCodeValue());
+            assertEquals(403, result.getStatusCodeValue());
             HttpHeaders headers = result.getHeaders();
 
             ResponseEntity<String> resultPing = makeRestCallWithHeaders(EXTERNAL_JWT_ENDPOINT, headers);
-            assertThat(resultPing.getStatusCodeValue()).isEqualTo(401);
+            assertThat(resultPing.getStatusCodeValue()).isEqualTo(403);
         } else {
             log.warn("External valid token testing scenario skkiped");
         }
@@ -212,6 +217,7 @@ public class MultipleAuthProviderSecurityConfigiration02Tests extends BaseSecuri
 
         ResponseEntity<String> resultPing = makeRestCallWithHeaders(EXTERNAL_JWT_ENDPOINT, headers);
         assertThat(resultPing.getStatusCodeValue()).isEqualTo(200);
+        assertThat(resultPing.getBody()).isEqualTo("OK");
     }
 
     @Test
@@ -220,18 +226,19 @@ public class MultipleAuthProviderSecurityConfigiration02Tests extends BaseSecuri
             HttpHeaders headers = super.getHeaderWithValidJWTExternalToken();
             ResponseEntity<String> resultPing = makeRestCallWithHeaders(EXTERNAL_JWT_ENDPOINT, headers);
             assertThat(resultPing.getStatusCodeValue()).isEqualTo(200);
+            assertThat(resultPing.getBody()).isEqualTo("OK");
         } else {
             log.warn("External valid token testing scenario skkiped");
         }
     }
 
     @Test
-    @Disabled //This test doesn't run on mvn clean install because security conf is not reload correct
-    public void testExternalJWTUsingInvalidToken_then401() {
+    @Disabled("This test doesn't run on mvn clean install because security conf is not reload correct")
+    public void testExternalJWTUsingInvalidToken_then403() {
         if (wasExternalTokenRead) {
             HttpHeaders headers = super.getHeaderWithInvalidJWTExternalToken();
             ResponseEntity<String> resultPing = makeRestCallWithHeaders(EXTERNAL_JWT_ENDPOINT, headers);
-            assertThat(resultPing.getStatusCodeValue()).isEqualTo(401);
+            assertThat(resultPing.getStatusCodeValue()).isEqualTo(403);
         }
     }
 

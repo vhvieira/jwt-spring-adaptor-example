@@ -1,0 +1,9 @@
+server:
+  port: 8080
+  servlet:
+    contextPath: /jwt-example
+logging:
+  level:
+    .: DEBUG
+    org.springframework: INFO
+    br.com.alphatecti: DEBUG

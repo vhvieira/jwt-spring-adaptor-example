@@ -1,5 +1,8 @@
 package br.com.alphatecti.security.jwt.example;
 
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,6 +148,10 @@ public abstract class BaseSecurityTests {
 
     /**
      * Get rest template to be used for testing Usefull if want to put special config on it
+     * 
+     * @throws KeyStoreException
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
      */
     private TestRestTemplate getRestTemplate() {
         return restTemplate;
